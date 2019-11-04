@@ -1,26 +1,79 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import UserCard from './components/UserCard.js';
+import SearchForm from './components/SearchForm.js';
 import './App.css';
 
-function App() {
+class App extends Component {
+
+  state = {
+    user: 'agyin3',
+    userData: {},
+    userFollowers: [],
+    search: ''
+  }
+
+  getUser = () => {
+    fetch(`https://api.github.com/users/${this.state.user}`)
+    .then(res => res.json())
+    .then(res => {
+      console.log(res)
+      this.setState({
+        userData: res
+      })
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  getFollowers = () => {
+    fetch(`https://api.github.com/users/${this.state.user}/followers`)
+    .then(res => res.json())
+    .then(res => {
+      console.log(res)
+      this.setState({
+        userFollowers: res
+      })
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  handleChange = e => {
+    this.setState({
+      search: e.target.value
+    })
+  }
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.setState({
+      user: this.state.search,
+      search: ''
+    })
+  }
+
+  componentDidMount() {
+    this.getUser();
+    this.getFollowers();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.user !== this.state.user) {
+      this.getUser();
+      this.getFollowers();
+    }
+  }
+
+  render() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <SearchForm handleChange={this.handleChange} value={this.state.search} handleSubmit={this.handleSubmit} />
+     <UserCard user={this.state.userData} followers={this.state.userFollowers} />
     </div>
   );
+  }
 }
 
 export default App;
