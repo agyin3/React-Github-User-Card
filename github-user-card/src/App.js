@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Grid } from 'semantic-ui-react';
 import UserCard from './components/UserCard.js';
 import SearchForm from './components/SearchForm.js';
+import FollowersCard from './components/FollowersCard.js';
 import './App.css';
 
 class App extends Component {
@@ -68,10 +70,31 @@ class App extends Component {
 
   render() {
   return (
-    <div>
-      <SearchForm handleChange={this.handleChange} value={this.state.search} handleSubmit={this.handleSubmit} />
-     <UserCard user={this.state.userData} followers={this.state.userFollowers} />
-    </div>
+    <Grid celled>
+      <Grid.Row>
+        <Grid.Column textAlign='center' width={13}>
+          <h1>Github Friends</h1>
+        </Grid.Column>
+        <Grid.Column width={3}>
+          <SearchForm 
+          handleChange={this.handleChange} 
+          value={this.state.search} 
+          handleSubmit={this.handleSubmit} 
+          />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row verticalAlign='top'>
+        <Grid.Column textAlign='center' width={4}>
+          <h2>User</h2>
+          <UserCard user={this.state.userData} followers={this.state.userFollowers} />
+        </Grid.Column>
+        <Grid.Column textAlign='center' width={12}>
+          <h2>Friends</h2>
+          <FollowersCard followers={this.state.userFollowers} />
+        </Grid.Column>
+      </Grid.Row>
+     
+     </Grid>
   );
   }
 }
