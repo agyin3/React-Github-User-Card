@@ -1,0 +1,8 @@
+.followers-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.follower-card {
+  margin-top: 0;
+}
